@@ -1,0 +1,46 @@
+﻿@using Kendo.Mvc.UI
+
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="small">
+    @(Html.Kendo().Grid<DocHead>()
+                  .Name("grid")
+                  .ColumnMenu(true)
+                  .ToolBar(tb => tb.Create())
+                  .Editable(ed =>
+                  {
+                      ed.Mode(GridEditMode.PopUp);
+                      ed.TemplateName("DocHead");
+                  })
+                  .Resizable(r => r.Columns(true))
+                  .Reorderable(r => r.Columns(true))
+                  .Pageable().Filterable().Sortable()
+                  .Columns(c =>
+                  {
+                      c.Bound(x => x.Descr)
+                          //.ClientTemplate("<a href='" + Url.Action("Details", "Aus", new { area = "Aus" }) + "?id=#=Id#'" + ">#=Descr#</a>")
+                          ;
+                      c.Command(cmd =>
+                      {
+                          cmd.Edit().Text(" ");
+                          cmd.Destroy().Text(" ").HtmlAttributes(new { style = "color:red" });
+                      }).Width(200);
+                  })
+
+                  .DataSource(ds => ds.Ajax()
+                      .ServerOperation(true)
+                      .Model(m =>
+                      {
+                          m.Id(x => x.Id);
+                      })
+                      .Read(r => r.Action("GetItems", "DocHeads"))
+                      .Update(u => u.Action("Update", "DocHeads"))
+                      .Destroy(d => d.Action("Destroy", "DocHeads"))
+                      .Create(c => c.Action("Create", "DocHeads")))
+    )
+</div>
+

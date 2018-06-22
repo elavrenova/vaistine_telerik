@@ -1,0 +1,48 @@
+﻿@using Kendo.Mvc.UI
+@*@model List<Cag>*@
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+<div>
+    @(Html.Kendo().Grid<CagViewModel>()
+          .Name("grid")
+          .ColumnMenu(true)
+          .ToolBar(tb => tb.Create())
+          .Editable(ed =>
+          {
+              ed.Mode(GridEditMode.PopUp);
+              ed.TemplateName("Cag");
+          })
+          .Resizable(r => r.Columns(true))
+          .Reorderable(r => r.Columns(true))
+          .Pageable().Filterable().Sortable()
+          .Columns(c =>
+          {
+              c.Bound(x => x.Descr)
+                  //.ClientTemplate("<a href='" + Url.Action("Details", "Aus", new { area = "Aus" }) + "?id=#=Id#'" + ">#=Descr#</a>")
+                  ;
+
+              //c.Bound(x => x.AnnPeriod).Title("прием заявок").Editable("getfalse");
+              //c.Bound(x => x.SaleDate).Format("{0:d}").Title("торги");
+              c.Command(cmd =>
+              {
+                  cmd.Edit().Text(" ");
+                  cmd.Destroy().Text(" ").HtmlAttributes(new { style = "color:red" });
+              }).Width(200);
+          })
+
+          .DataSource(ds => ds.Ajax()
+              .ServerOperation(true)
+              .Model(m =>
+              {
+                  m.Id(x => x.Id);
+              })
+              .Read(r => r.Action("GetItems", "Cags", new { area="Cags"}))
+              .Update(u => u.Action("Update", "Cags", new { area = "Cags" }))
+              .Destroy(d => d.Action("Destroy", "Cags", new { area = "Cags" }))
+              .Create(c => c.Action("Create", "Cags", new { area = "Cags" })))
+          )
+</div>

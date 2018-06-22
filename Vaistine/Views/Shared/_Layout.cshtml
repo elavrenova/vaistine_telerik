@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vaistine</title>
+
+    @*<link href="https://kendo.cdn.telerik.com/2018.1.117/styles/kendo.common-material.min.css" rel="stylesheet" type="text/css" />*@
+    <link href="https://kendo.cdn.telerik.com/2018.1.117/styles/kendo.blueopal.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2018.1.117/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2018.1.117/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    @*<link href="https://kendo.cdn.telerik.com/2018.1.117/styles/kendo.material.min.css" rel="stylesheet" type="text/css" />*@
+
+    <script src="https://kendo.cdn.telerik.com/2018.1.117/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.1.117/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.1.117/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.1.117/js/kendo.aspnetmvc.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    </environment>
+
+</head>
+<body class="bg-info">
+    <div class="k-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <h3><a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home text-info"></i></a></h3>
+                </div>
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-4 text-right">
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container menu-content text-primary">
+        <div id="responsive-panel">
+            @(Html.Kendo().Menu().HtmlAttributes(new { @class = "text-primary" })
+                                .Name("Menu")
+                                .Items(items =>
+                                {
+                                    items.Add().Text("Склады").Action("Index", "Stores", new { area = "Stores" });
+                                    items.Add().Text("Контрагенты").Action("Index", "Cags", new { area = "Cags" });
+
+                                    items.Add().Text("Товары")
+                                        .Items(children =>
+                                        {
+                                            children.Add().Text("Компоненты").Action("Index", "Components", new { area = "Goods" });
+                                            children.Add().Text("Товары").Action("Index", "Goods", new { area = "Goods" });
+                                            children.Add().Text("Категории товаров").Action("Index", "GoodCategories", new { area = "Goods" });
+                                            children.Add().Text("Единицы измерения").Action("Index", "Units", new { area = "Goods" });
+                                        });
+                                    items.Add().Text("Документы").Action("Index", "DocHeads", new { area = "Docs" });
+
+
+                                })
+            )
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <footer class="footer">
+            <span class="text-muted text-center">© Lisoid Production @DateTime.Now.Year </span>
+        </footer>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿@using Kendo.Mvc.UI
+@model List<DocHead>
+
+@(Html.Kendo().Grid<DocHead>()
+      .Name("outdocs_grid")
+      .ColumnMenu(true)
+      .Resizable(r => r.Columns(true))
+      .Reorderable(r => r.Columns(true))
+      .Pageable().Filterable().Sortable()
+      .Columns(c =>
+      {
+          c.Bound(x => x.Descr).Title("Документ");
+          c.Bound(x => x.FromDate).Format("{0:d}").Title("Отгружено");
+          c.Bound(x => x.ToDate).Format("{0:d}").Title("Принято");
+
+          c.Command(cmd =>
+          {
+              cmd.Edit().Text(" ");
+              cmd.Destroy().Text(" ").HtmlAttributes(new {style = "color:red"});
+          }).Width(200);
+      })
+
+      .DataSource(ds => ds.Ajax()
+          .ServerOperation(true)
+          .Model(m =>
+          {
+              m.Id(x => x.Id);
+              m.Field(x => x.Id).DefaultValue(Guid.NewGuid());
+          })
+          .Read(r => r.Action("GetOutDocs", "DocHeads", new {StoreId = ViewBag.StoreId, area = "Docs"}))
+          .Update(u => u.Action("Update", "DocHeads", new {area = "Docs"}))
+          .Destroy(d => d.Action("Destroy", "DocHeads", new {area = "Docs"}))
+      )
+)

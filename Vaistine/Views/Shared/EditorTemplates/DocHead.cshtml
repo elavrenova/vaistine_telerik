@@ -1,0 +1,48 @@
+﻿@using Kendo.Mvc.UI
+
+@model Vaistine.Areas.Docs.Models.DocHead
+
+<div class="row">
+    <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FromStoreId" class="control-label"></label>
+                <select asp-for="FromStoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
+                <span asp-validation-for="FromStoreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToStoreId" class="control-label"></label>
+                <select asp-for="ToStoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
+                <span asp-validation-for="ToStoreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FromDate" class="control-label"></label>
+                @(Html.Kendo().DatePickerFor(x => x.FromDate))
+                <span asp-validation-for="FromDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToDate" class="control-label"></label>
+                @(Html.Kendo().DatePickerFor(x=>x.ToDate))
+                <span asp-validation-for="ToDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FromCagId" class="control-label"></label>
+                <select asp-for="FromCagId" class="form-control" asp-items="ViewBag.CagId"></select>
+                <span asp-validation-for="FromCagId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToCagId" class="control-label"></label>
+                <select asp-for="ToCagId" class="form-control" asp-items="ViewBag.CagId"></select>
+                <span asp-validation-for="ToCagId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descr" class="control-label"></label>
+                <input asp-for="Descr" class="form-control" />
+                <span asp-validation-for="Descr" class="text-danger"></span>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

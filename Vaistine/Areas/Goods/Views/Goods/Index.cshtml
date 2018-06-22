@@ -1,0 +1,48 @@
+﻿@using Kendo.Mvc.UI
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h3> Здесь будут товары </h3>
+<div>
+    @(Html.Kendo().Grid<Good>()
+                  .Name("grid")
+                  .ColumnMenu(true)
+                  .ToolBar(tb => tb.Create())
+                  //.Editable(ed =>
+                  //{
+                  //    ed.Mode(GridEditMode.PopUp);
+                  //    ed.TemplateName("Au");
+                  //})
+                  .Resizable(r => r.Columns(true))
+                  .Reorderable(r => r.Columns(true))
+                  .Pageable().Filterable().Sortable()
+                  .Columns(c =>
+                  {
+                      c.Bound(x => x.Descr)
+                          //.ClientTemplate("<a href='" + Url.Action("Details", "Aus", new { area = "Aus" }) + "?id=#=Id#'" + ">#=Descr#</a>")
+                          ;
+          //c.Bound(x => x.AnnPeriod).Title("прием заявок").Editable("getfalse");
+          //c.Bound(x => x.SaleDate).Format("{0:d}").Title("торги");
+          c.Command(cmd =>
+                      {
+                          cmd.Edit().Text(" ");
+                          cmd.Destroy().Text(" ").HtmlAttributes(new { style = "color:red" });
+                      }).Width(200);
+                  })
+
+                  .DataSource(ds => ds.Ajax()
+                      //.ServerOperation(true)
+                      .Model(m =>
+                      {
+                          m.Id(x => x.Id);
+                          m.Field(x => x.Id).DefaultValue(Guid.NewGuid());
+                      })
+                      .Read(r => r.Action("GetItems", "Goods", new { area = "Goods" }))
+                      .Update(u => u.Action("Update", "Goods", new { area = "Goods" }))
+                      .Destroy(d => d.Action("Destroy", "Goods", new { area = "Goods" }))
+                      .Create(c => c.Action("Create", "Goods", new { area = "Goods" })))
+    )
+</div>

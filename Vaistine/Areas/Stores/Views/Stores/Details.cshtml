@@ -1,0 +1,57 @@
+﻿@using Kendo.Mvc.UI
+@model Vaistine.Areas.Stores.Models.Store
+
+@{
+    ViewData["Title"] = "Details";
+}
+<h2>@Model.Descr</h2>
+<hr />
+<div class="small">
+    @(Html.Kendo().TabStrip().Name("tabstrip")
+
+          .Items(
+              ts =>
+              {
+                  ts.Add().Text("Общие сведения").HtmlAttributes(new { style = "width:auto" })
+                      .Selected(true)
+                      .Content(@<text>
+                                   <dl class="dl-horizontal">
+                                       <dt>
+                                           Название
+                                       </dt>
+                                       <dd>
+                                           @Html.DisplayFor(model => model.Descr)
+                                       </dd>
+                                       <dt>
+                                           @Html.DisplayNameFor(model => model.OwnerId)
+                                       </dt>
+                                       <dd>
+                                           @Html.DisplayFor(model => model.Owner.Descr)
+                                       </dd>
+                                       <dt>
+                                           @Html.DisplayNameFor(model => model.IsAccount)
+                                       </dt>
+                                       <dd>
+                                           @Html.DisplayFor(model => model.IsAccount)
+                                       </dd>
+                                   </dl>
+                                </text>);
+                  ts.Add().Text("Входные документы")
+                      .HtmlAttributes(new{style="width:auto"})
+                      .Content(@<text>
+                                    <vc:store-in-docs-vc id="@Model.Id"></vc:store-in-docs-vc>
+                                </text>);
+                  ts.Add().Text("Выходные документы")
+                      .HtmlAttributes(new { style = "width:auto" })
+                      .Content(@<text>
+                                    <vc:store-out-docs-vc id="@Model.Id "></vc:store-out-docs-vc>                                                    
+                                </text>);
+
+              }
+
+          )
+
+          )
+</div>
+
+

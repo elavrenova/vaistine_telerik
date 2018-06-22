@@ -1,0 +1,48 @@
+﻿@using Kendo.Mvc.UI
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Склады</h2>
+<div class="small">
+    @(Html.Kendo().Grid<Store>()
+                  .Name("grid")
+                  .ColumnMenu(true)
+                  .ToolBar(tb => tb.Create())
+                  //.Editable(ed =>
+                  //{
+                  //    ed.Mode(GridEditMode.PopUp);
+                  //    ed.TemplateName("Au");
+                  //})
+                  .Resizable(r => r.Columns(true))
+                  .Reorderable(r => r.Columns(true))
+                  .Pageable().Filterable().Sortable()
+                  .Columns(c =>
+                  {
+                      c.Bound(x => x.Descr)
+                          .Title("Название")
+                          .ClientTemplate("<a href='" + Url.Action("Details", "Stores", new { area = "Stores" }) + "?id=#=Id#'" + ">#=Descr#</a>");
+                      c.ForeignKey(x => x.OwnerId, (System.Collections.IEnumerable) ViewData["ownerid"], "Id", "Descr");
+                      c.Bound(x => x.IsAccount).ClientTemplate("# if (data.IsAccount) { # <i class='fa fa-check' aria-hidden='true'></i> # } #");
+                      c.Command(cmd =>
+                      {
+                          cmd.Edit().Text(" ");
+                          cmd.Destroy().Text(" ").HtmlAttributes(new { style = "color:red" });
+                      }).Width(200);
+                  })
+
+                  .DataSource(ds => ds.Ajax()
+                      .ServerOperation(true)
+                      .Model(m =>
+                      {
+                          m.Id(x => x.Id);
+                          m.Field(x => x.Id).DefaultValue(Guid.NewGuid());
+                      })
+                      .Read(r => r.Action("GetItems", "Stores"))
+                      .Update(u => u.Action("Update", "Stores"))
+                      .Destroy(d => d.Action("Destroy", "Stores"))
+                      .Create(c => c.Action("Create", "Stores")))
+    )
+</div>
